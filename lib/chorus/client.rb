@@ -25,7 +25,7 @@ module Chorus
 
     # @param api_key [String, nil] Anthropic API key. Defaults to ENV["ANTHROPIC_API_KEY"].
     # @param model [String] model id to use for every call made by this client.
-    def initialize(api_key: ENV["ANTHROPIC_API_KEY"], model: DEFAULT_MODEL)
+    def initialize(api_key: ENV.fetch("ANTHROPIC_API_KEY", nil), model: DEFAULT_MODEL)
       raise MissingAPIKeyError if api_key.nil? || api_key.empty?
 
       @api_key = api_key
@@ -50,6 +50,22 @@ module Chorus
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
 
+      request = build_request(uri, system_prompt: system_prompt, messages: messages, max_tokens: max_tokens)
+      response = http.request(request)
+
+      # The interpolated error message is clearer on one line than split
+      # across a modifier-if, even though it runs right up against the
+      # line-length limit.
+      # rubocop:disable Style/IfUnlessModifier
+      unless response.is_a?(Net::HTTPSuccess)
+        raise APIError, "Anthropic API error (#{response.code}): #{response.body}"
+      end
+      # rubocop:enable Style/IfUnlessModifier
+
+      JSON.parse(response.body)
+    end
+
+    def build_request(uri, system_prompt:, messages:, max_tokens:)
       request = Net::HTTP::Post.new(uri)
       request["Content-Type"] = "application/json"
       request["x-api-key"] = @api_key
@@ -60,13 +76,7 @@ module Chorus
         system: system_prompt,
         messages: messages
       )
-
-      response = http.request(request)
-      unless response.is_a?(Net::HTTPSuccess)
-        raise APIError, "Anthropic API error (#{response.code}): #{response.body}"
-      end
-
-      JSON.parse(response.body)
+      request
     end
 
     def extract_text(response)

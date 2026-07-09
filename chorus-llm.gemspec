@@ -25,10 +25,4 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir["lib/**/*.rb", "README.md", "LICENSE.txt", "chorus-llm.gemspec"]
   spec.require_paths = ["lib"]
-
-  spec.add_development_dependency "bundler-audit", "~> 0.9"
-  spec.add_development_dependency "rspec", "~> 3.13"
-  spec.add_development_dependency "rubocop", "~> 1.75"
-  spec.add_development_dependency "rubocop-performance", "~> 1.24"
-  spec.add_development_dependency "rubocop-rspec", "~> 3.6"
 end

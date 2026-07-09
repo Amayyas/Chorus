@@ -56,7 +56,7 @@ module Chorus
       slice = []
 
       summary = other_agents_summary(agent_name)
-      slice << { role: "user", content: "[Contexte des autres agents] #{summary}" } if summary
+      slice << { role: "user", content: "[Other agents' context] #{summary}" } if summary
 
       slice.concat(own_history_for(agent_name))
 
@@ -74,8 +74,8 @@ module Chorus
       @messages.each_with_index do |message, index|
         next unless message.role == :assistant && message.agent == agent_name
 
-        preceding = @messages[index - 1] if index.positive?
-        pairs << { role: "user", content: preceding.content } if preceding && preceding.role == :user
+        preceding_task = preceding_user_message(index)
+        pairs << { role: "user", content: preceding_task } if preceding_task
         pairs << { role: "assistant", content: message.content }
       end
 
@@ -86,17 +86,31 @@ module Chorus
     # asked to do, so `agent_name` has visibility without full pollution.
     def other_agents_summary(agent_name)
       subjects = @messages.each_with_index.filter_map do |message, index|
-        next unless message.role == :assistant && message.agent && message.agent != agent_name
+        next unless other_agent_response?(message, agent_name)
 
-        preceding = @messages[index - 1]
-        next unless preceding && preceding.role == :user
+        preceding_task = preceding_user_message(index)
+        next unless preceding_task
 
-        "#{message.agent}: #{truncate(preceding.content)}"
+        "#{message.agent}: #{truncate(preceding_task)}"
       end
 
       return nil if subjects.empty?
 
       subjects.uniq.join("; ")
+    end
+
+    def other_agent_response?(message, agent_name)
+      message.role == :assistant && message.agent && message.agent != agent_name
+    end
+
+    # @return [String, nil] the content of the user message right before
+    #   `@messages[index]`, or nil if there isn't one (e.g. this is the first
+    #   message, or the previous entry wasn't a user turn).
+    def preceding_user_message(index)
+      return nil unless index.positive?
+
+      preceding = @messages[index - 1]
+      preceding.content if preceding.role == :user
     end
 
     def truncate(text)

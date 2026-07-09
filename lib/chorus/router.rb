@@ -23,7 +23,11 @@ module Chorus
 
     def coding_task?(message)
       normalized = message.downcase
+      # rubocop:disable Style/ArrayIntersect -- `normalized` is a String, not
+      # an Array; Array#intersect? would raise a TypeError here. This is a
+      # substring check on each keyword, not an array-element intersection.
       CODER_KEYWORDS.any? { |keyword| normalized.include?(keyword) }
+      # rubocop:enable Style/ArrayIntersect
     end
   end
 end
