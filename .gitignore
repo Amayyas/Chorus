@@ -1,0 +1,8 @@
+/vendor/bundle/
+/Gemfile.lock
+.rspec_status
+*.gem
+/.bundle/
+
+# Original planning prompt — not part of the shipped project
+/chorus_mvp_prompt.md
