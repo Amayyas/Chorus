@@ -2,6 +2,7 @@
 
 RSpec.describe Chorus::Orchestrator do
   let(:client) { instance_double(Chorus::Client) }
+
   subject(:orchestrator) { described_class.new(client: client) }
 
   before do

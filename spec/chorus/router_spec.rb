@@ -4,7 +4,7 @@ RSpec.describe Chorus::Router do
   subject(:router) { described_class.new }
 
   # message => expected agent
-  CASES = {
+  cases = {
     "There's a bug in my sorting function" => :coder,
     "Can you help me debug this Ruby script?" => :coder,
     "Write a function that reverses a string" => :coder,
@@ -13,9 +13,9 @@ RSpec.describe Chorus::Router do
     "Can you explain how photosynthesis works?" => :research,
     "Summarize the history of the Roman Empire" => :research,
     "What's the difference between weather and climate?" => :research
-  }.freeze
+  }
 
-  CASES.each do |message, expected_agent|
+  cases.each do |message, expected_agent|
     it "routes #{message.inspect} to #{expected_agent.inspect}" do
       expect(router.route(message)).to eq(expected_agent)
     end

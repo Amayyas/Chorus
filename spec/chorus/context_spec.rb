@@ -65,7 +65,7 @@ RSpec.describe Chorus::Context do
 
       summary_message = slice.first
       expect(summary_message[:role]).to eq("user")
-      expect(summary_message[:content]).to include("[Contexte des autres agents]")
+      expect(summary_message[:content]).to include("[Other agents' context]")
       expect(summary_message[:content]).to include("research")
       expect(summary_message[:content]).to include("What is the capital of France?")
     end
@@ -89,7 +89,7 @@ RSpec.describe Chorus::Context do
       slice = context.slice_for(:coder, "Now add tests for it")
 
       expect(slice.size).to eq(4)
-      expect(slice[0][:content]).to include("[Contexte des autres agents]")
+      expect(slice[0][:content]).to include("[Other agents' context]")
       expect(slice[1]).to eq(role: "user", content: "Write a sort function")
       expect(slice[2]).to eq(role: "assistant", content: "Here is a sort function")
       expect(slice[3]).to eq(role: "user", content: "Now add tests for it")

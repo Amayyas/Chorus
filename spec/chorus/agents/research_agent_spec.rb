@@ -2,6 +2,7 @@
 
 RSpec.describe Chorus::Agents::ResearchAgent do
   let(:client) { instance_double(Chorus::Client) }
+
   subject(:agent) { described_class.new(client: client) }
 
   it "is named :research" do
