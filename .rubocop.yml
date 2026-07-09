@@ -1,0 +1,43 @@
+require:
+  - rubocop-performance
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.2
+  Exclude:
+    - "vendor/**/*"
+    - "examples/**/*"
+
+# YARD comments are our documentation convention; the cop's heuristics don't
+# recognize them and would otherwise demand redundant class-level comments.
+Style/Documentation:
+  Enabled: false
+
+# The codebase is consistently double-quoted; that's a valid RuboCop style,
+# just not the cop's own default.
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+# `let(:client)` before `subject(:agent)` reads naturally when the subject
+# is built from the let — don't force subject first.
+RSpec/LeadingSubject:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+    - "chorus-llm.gemspec"
+    - "Rakefile"
+
+Metrics/MethodLength:
+  Max: 15
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Max: 20
+
+RSpec/NestedGroups:
+  Max: 4
