@@ -24,4 +24,30 @@ RSpec.describe Chorus::Router do
   it "is case-insensitive when matching keywords" do
     expect(router.route("THERE IS A BUG HERE")).to eq(:coder)
   end
+
+  # Regression cases for a substring-matching bug: a naive `include?` check
+  # against the raw message matched "class" inside "classical"/"classic" and
+  # "error" inside "errors", misrouting these to :coder.
+  describe "whole-word matching (regression)" do
+    cases = {
+      "What is the classical explanation for gravity?" => :research,
+      "Can you summarize this classic novel?" => :research,
+      "What errors did historians identify in this account?" => :research
+    }
+
+    cases.each do |message, expected_agent|
+      it "does not misroute #{message.inspect} on a keyword substring" do
+        expect(router.route(message)).to eq(expected_agent)
+      end
+    end
+
+    it "documents a known residual limitation: standalone ambiguous keywords still misroute" do
+      # "function" is a whole word here, not a substring match, but it's
+      # inherently ambiguous ("a function" vs. "how it functions"). Keyword
+      # matching can't disambiguate that — only a semantic/LLM-based router
+      # can. This spec exists so the behavior is a documented, intentional
+      # limitation rather than a silent surprise.
+      expect(router.route("How does a democracy function in practice?")).to eq(:coder)
+    end
+  end
 end

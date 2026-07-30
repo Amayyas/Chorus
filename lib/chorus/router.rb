@@ -21,13 +21,18 @@ module Chorus
 
     private
 
+    # Whole-word matching, not substring: a naive `include?` check would
+    # match "class" inside "classical" or "error" inside "errors", routing
+    # unrelated messages to :coder. Splitting into words first avoids that
+    # class of false positive.
+    #
+    # This doesn't make keyword matching perfect — a word like "function" is
+    # genuinely ambiguous ("a function" vs. "how it functions") and will
+    # still misroute some messages either way. That's an inherent limitation
+    # of keyword matching, not a bug; see the LLM-based router follow-up.
     def coding_task?(message)
-      normalized = message.downcase
-      # rubocop:disable Style/ArrayIntersect -- `normalized` is a String, not
-      # an Array; Array#intersect? would raise a TypeError here. This is a
-      # substring check on each keyword, not an array-element intersection.
-      CODER_KEYWORDS.any? { |keyword| normalized.include?(keyword) }
-      # rubocop:enable Style/ArrayIntersect
+      words = message.downcase.scan(/\w+/)
+      CODER_KEYWORDS.intersect?(words)
     end
   end
 end
