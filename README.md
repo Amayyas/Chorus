@@ -171,3 +171,15 @@ intentionally does not include:
 - **LLM-generated summaries** — the other-agents summary in `slice_for` is a
   simple concatenation of truncated subjects, not an API call.
 - **Advanced error handling** (retries, backoff, etc.) on API calls.
+
+See [open issues](https://github.com/Amayyas/Chorus/issues) for the full,
+up-to-date backlog — the list above is the original MVP scope, not a
+snapshot of everything planned.
+
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for dev
+setup, how to run checks locally, and the commit/PR conventions this project
+follows. Participation is governed by the
+[Code of Conduct](CODE_OF_CONDUCT.md). Found a security issue? See
+[SECURITY.md](SECURITY.md) instead of opening a public issue.

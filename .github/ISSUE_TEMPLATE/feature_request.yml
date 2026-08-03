@@ -1,0 +1,27 @@
+name: Feature request
+description: Propose a new agent, capability, or architectural change
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: What problem does this solve, or what does it enable? Why does it belong in Chorus specifically?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed approach
+      description: As concrete as you can make it — API shape, which classes it touches, etc. It's fine to leave this rough for discussion.
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any other approaches you thought about and why you didn't go with them.
+    validations:
+      required: false
