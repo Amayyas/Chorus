@@ -1,0 +1,30 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Mondays at 06:00 UTC — catches new query packs/advisories even
+    # without code changes.
+    - cron: "0 6 * * 1"
+
+jobs:
+  analyze:
+    name: Analyze (Ruby)
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: ruby
+
+      - uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:ruby"
