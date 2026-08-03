@@ -1,0 +1,22 @@
+includes:
+  - lib
+
+requires:
+  - chorus
+
+integration:
+  name: rspec
+
+# Scoped to the classes with real conditional logic and behavioral specs.
+# Deliberately excludes:
+# - Chorus::Client — every spec mocks it entirely (see issue #9); mutating
+#   HTTP-calling code nobody actually exercises would just produce noise.
+# - Chorus::Agent and the concrete agent subclasses — thin wrappers with no
+#   branching logic of their own.
+# Expand this list as coverage grows (e.g. once #9 lands, Client belongs
+# here too).
+matcher:
+  subjects:
+    - Chorus::Router
+    - Chorus::Context
+    - Chorus::Orchestrator
