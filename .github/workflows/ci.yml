@@ -13,6 +13,9 @@ jobs:
   test:
     name: Tests (Ruby ${{ matrix.ruby }})
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # for Codecov OIDC upload — no CODECOV_TOKEN secret needed
     strategy:
       fail-fast: false
       matrix:
@@ -25,6 +28,15 @@ jobs:
           bundler-cache: true
       - name: Run test suite
         run: bundle exec rspec
+      - name: Upload coverage to Codecov
+        # Only once — the other matrix legs would just re-upload the same
+        # coverage data.
+        if: matrix.ruby == '3.2'
+        uses: codecov/codecov-action@v7
+        with:
+          use_oidc: true
+          files: coverage/coverage.xml
+          fail_ci_if_error: false
 
   rubocop:
     name: RuboCop
