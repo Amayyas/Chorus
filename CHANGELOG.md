@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.1](https://github.com/Amayyas/Chorus/compare/v0.2.0...v0.2.1) (2026-08-03)
+
+
+### Bug Fixes
+
+* match router keywords on whole words, not substrings ([3dc01ff](https://github.com/Amayyas/Chorus/commit/3dc01ff5a6b0d7550c60b256b2b06c4a507cade3)), closes [#3](https://github.com/Amayyas/Chorus/issues/3)
+* router keyword matching now uses whole words, not substrings ([de1a455](https://github.com/Amayyas/Chorus/commit/de1a4554cb9c18f0951ed635f46fbbffe6dff014))
+
 ## [0.2.0](https://github.com/Amayyas/Chorus/compare/v0.1.0...v0.2.0) (2026-07-09)
 
 
