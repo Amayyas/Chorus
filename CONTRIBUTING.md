@@ -29,6 +29,21 @@ bundle exec rake        # both (Rakefile default task)
 All three run in CI on every pull request — a green PR locally should stay
 green there.
 
+### Mutation testing (optional, informational)
+
+```bash
+bundle exec mutant run --usage opensource
+```
+
+Runs [mutant](https://github.com/mbj/mutant) against the classes with real
+conditional logic (`Chorus::Router`, `Chorus::Context`, `Chorus::Orchestrator`
+— see `.mutant.yml`) to check whether the specs would actually catch a
+regression, not just that they pass. Free for public open source use, but
+requires registering this repo once under mutant's Free Project License —
+see the project's own account setup at
+[github.com/mbj/mutant](https://github.com/mbj/mutant). Not required to
+contribute; the CI job is informational and non-blocking.
+
 ## Commit messages: Conventional Commits
 
 This project uses [Conventional Commits](https://www.conventionalcommits.org/),

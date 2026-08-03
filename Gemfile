@@ -5,6 +5,8 @@ source "https://rubygems.org"
 gemspec
 
 gem "bundler-audit", "~> 0.9"
+gem "mutant", "~> 0.16", require: false
+gem "mutant-rspec", "~> 0.16", require: false
 gem "rake", "~> 13.0"
 gem "rspec", "~> 3.13"
 gem "rubocop", "~> 1.75"

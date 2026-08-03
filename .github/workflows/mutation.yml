@@ -1,0 +1,26 @@
+name: Mutation testing
+
+# Informational only (continue-on-error), and NOT wired to push/pull_request
+# yet: this needs the repo registered under mutant's free Open Source
+# License (https://github.com/mbj/mutant — separate account, not something
+# automatable) before `--usage opensource` will actually run mutations
+# instead of failing on a license check. Once that's done and the runtime
+# on this codebase is known, this can move to push/pull_request triggers.
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 6 * * 1" # Mondays at 06:00 UTC
+
+jobs:
+  mutant:
+    name: Mutant (informational)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+      - name: Run mutant against Router, Context, Orchestrator
+        run: bundle exec mutant run --usage opensource
