@@ -1,0 +1,55 @@
+name: Scheduled dependency check
+
+# Runs the same checks as CI, but with no dependency cache — so it always
+# resolves the latest gem versions matching our version constraints. This
+# is what makes it useful: it catches a newly published dependency (e.g. a
+# RuboCop release with new default cops) breaking the build *before* it
+# surprises the next real pull request.
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays at 06:00 UTC
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    name: Tests (Ruby ${{ matrix.ruby }}, fresh dependencies)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ["3.2", "3.3", "3.4"]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: false
+      - run: bundle install
+      - name: Run test suite
+        run: bundle exec rspec
+
+  rubocop:
+    name: RuboCop (fresh dependencies)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: false
+      - run: bundle install
+      - name: Run RuboCop
+        run: bundle exec rubocop
+
+  bundler-audit:
+    name: bundler-audit (fresh dependencies)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: false
+      - run: bundle install
+      - name: Check for known-vulnerable dependencies
+        run: bundle exec bundle-audit check --update
