@@ -1,5 +1,25 @@
 # frozen_string_literal: true
 
+require "simplecov"
+require "simplecov-cobertura"
+
+# HTML for local browsing (coverage/index.html), Cobertura XML
+# (coverage/coverage.xml) because Codecov's uploader doesn't understand
+# SimpleCov's native .resultset.json format.
+SimpleCov.formatters = [
+  SimpleCov::Formatter::HTMLFormatter,
+  SimpleCov::Formatter::CoberturaFormatter
+]
+
+SimpleCov.start do
+  add_filter "/spec/"
+  # Set to the actual measured baseline (client.rb's HTTP-calling code is
+  # mocked out everywhere and only ~44% covered — see issue #9). This is a
+  # regression floor, not an aspirational target; raise it once #9 adds
+  # HTTP-contract specs for Client.
+  minimum_coverage 80
+end
+
 require "chorus"
 
 RSpec.configure do |config|

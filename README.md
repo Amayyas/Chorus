@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/Amayyas/Chorus/actions/workflows/ci.yml/badge.svg)](https://github.com/Amayyas/Chorus/actions/workflows/ci.yml)
 [![Gem Version](https://badge.fury.io/rb/chorus-llm.svg)](https://rubygems.org/gems/chorus-llm)
+[![codecov](https://codecov.io/gh/Amayyas/Chorus/branch/main/graph/badge.svg)](https://codecov.io/gh/Amayyas/Chorus)
 
 Chorus is a Ruby framework for orchestrating multiple specialized LLM agents.
 

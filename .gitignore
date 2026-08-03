@@ -3,6 +3,7 @@
 .rspec_status
 *.gem
 /.bundle/
+/coverage/
 
 # Original planning prompt — not part of the shipped project
 /chorus_mvp_prompt.md
